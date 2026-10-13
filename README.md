@@ -1,6 +1,6 @@
 # 贪吃蛇 Snake Game
 
-基于 Python + pygame-ce 实现的经典贪吃蛇小游戏，可打包成单个 `.exe` 文件分享给朋友，双击即玩。
+基于 Python + pygame-ce 实现的经典贪吃蛇小游戏，单文件结构，使用 git 进行版本管理。
 
 ## 玩法
 
@@ -16,29 +16,29 @@
 - 撞墙或撞到自己即游戏结束
 - 最高分自动保存在 `snake_highscore.json`
 
-## 运行（需要 Python）
+## 运行
 
 ```bash
-pip install pygame-ce
+pip install -r requirements.txt
 python snake_game.py
 ```
 
-## 打包成 exe（分享给朋友）
+## git 工作流
 
 ```bash
-pip install pyinstaller
-pyinstaller --onefile --windowed --name SnakeGame snake_game.py
+git status                  # 查看改动
+git add -A                  # 暂存所有改动
+git commit -m "改动说明"     # 提交
+git log --oneline           # 查看历史
+git diff                    # 查看未暂存的改动
 ```
 
-打包完成后，`dist/SnakeGame.exe` 就是最终成品。把这个文件发给朋友，双击即可运行，**对方不需要安装 Python 或任何依赖**。
+改坏了想回退到上一个提交：
 
-> 注意：`--windowed` 表示不显示黑色控制台窗口。如果你想在出错时看到日志，去掉这个参数即可。
-
-## 跨平台说明
-
-- 在 **Windows** 上打包 → 得到 `.exe`，只能给 Windows 用户用
-- 在 **macOS** 上打包 → 得到可执行文件，只能给 macOS 用户用
-- 想让 Mac 朋友也玩，需要在 Mac 上重新打包一次
+```bash
+git checkout -- snake_game.py        # 丢弃单个文件的工作区改动
+git reset --hard HEAD                # 丢弃所有未提交改动（慎用）
+```
 
 ## 项目结构
 
@@ -68,3 +68,21 @@ SPEED_UP_EVERY = 4  # 每吃几个食物提速
 STEP_FPS = 2        # 每次提速多少
 GRID_W, GRID_H = 20, 20   # 棋盘大小
 ```
+
+## 实现要点
+
+- **方向输入队列**：按键存入 `dir_queue`，避免一帧内连按两次导致反向自杀
+- **撞自己判定**：尾部那一节在这一帧会移走，所以判定时排除它（`pending_growth == 0` 时）
+- **最高分持久化**：存在脚本同目录的 `snake_highscore.json`，只读环境下静默失败不影响游戏
+- **无头测试**：设置 `SDL_VIDEODRIVER=dummy` 可在无显示器环境下跑逻辑测试
+
+## 可选：打包成 exe
+
+如果之后又想分发给别人玩（暂时不需要）：
+
+```bash
+pip install pyinstaller
+pyinstaller --onefile --windowed --name SnakeGame snake_game.py
+```
+
+产物在 `dist/SnakeGame.exe`。注意 `dist/` 和 `build/` 已在 `.gitignore` 中排除，不会污染仓库。
