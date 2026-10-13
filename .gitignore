@@ -1,0 +1,26 @@
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+venv/
+.venv/
+env/
+
+# ---- PyInstaller 打包产物 ----
+build/
+dist/
+*.spec
+
+# ---- 游戏运行时数据 ----
+snake_highscore.json
+
+# ---- 编辑器 / 系统 ----
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# ---- WorkBuddy 工作目录 ----
+.workbuddy/
