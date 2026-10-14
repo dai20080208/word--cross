@@ -919,6 +919,9 @@
     updateSoundBtn();
     bind();
     updateBookBadge();
+    // 首页词条数按实际词库动态显示，以后加词不用改 HTML
+    var chipWords = $('#chipWords');
+    if (chipWords) chipWords.textContent = '📚 ' + VOCAB.all.length + ' 个词条';
     // 进度数字初始化
     $('#filledCount').textContent = '0';
     $('#totalCount').textContent = '0';
