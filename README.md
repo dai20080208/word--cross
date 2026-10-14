@@ -8,7 +8,7 @@
 > 纯前端静态页面（原生 HTML + CSS + JavaScript，零依赖、零后端、零 API 调用）。
 > 所有数据都存在浏览器本地，打开网页就能玩，**不消耗任何 AI 积分**，可以随便发给别人用。
 
-🔗 **在线试玩：** <https://da20000208.github.io/word-cross/>　·　备用地址 <https://word-cross-puzzle.app.workbuddy.host/>
+🔗 **在线试玩：** <https://dai20080208.github.io/word--cross/>　·　备用地址 <https://word-cross-puzzle.app.workbuddy.host/>
 
 ![首页](docs/screenshot-home.png)
 
@@ -178,7 +178,7 @@ words: [
 
 ## 🌐 发布到 GitHub Pages
 
-仓库地址：<https://github.com/da20000208/word-cross>
+仓库地址：<https://github.com/dai20080208/word--cross>
 
 本地仓库已经关联好远程（`origin`）并切到 `main` 分支，只需要推送一次：
 
@@ -189,11 +189,11 @@ git push -u origin main
 
 推送完成后开启 Pages：
 
-1. 打开 <https://github.com/da20000208/word-cross/settings/pages>
+1. 打开 <https://github.com/dai20080208/word--cross/settings/pages>
 2. **Source** 选 `Deploy from a branch`
 3. **Branch** 选 `main`，目录选 `/(root)`，点 **Save**
 
-等一两分钟，访问 <https://da20000208.github.io/word-cross/> 就能在线玩了。
+等一两分钟，访问 <https://dai20080208.github.io/word--cross/> 就能在线玩了。
 谁都能直接打开，不需要安装任何东西。（仓库里的 `.nojekyll` 是为了让 GitHub Pages 原样输出文件，别删。）
 
 > 另外还有一个已经部署好的在线地址：<https://word-cross-puzzle.app.workbuddy.host/>，两者内容一致。
