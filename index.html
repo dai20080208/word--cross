@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>单词交叉填字 · WordCross —— 卡通记单词小游戏</title>
+<meta name="description" content="随机抽取 10 个单词纵横交错排布，交点处字母相同，根据中文释义填空记单词。支持小学、初中、高中、四级、六级、雅思六个阶段词汇，含词汇查阅与生词本。" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧩</text></svg>" />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- ============ 卡通背景（纯 CSS 画的蓝天、白云、草地） ============ -->
+<div class="scene" aria-hidden="true">
+  <div class="sun"></div>
+  <div class="cloud cloud-1"></div>
+  <div class="cloud cloud-2"></div>
+  <div class="cloud cloud-3"></div>
+  <div class="hills"></div>
+  <div class="ground"></div>
+  <div class="tree tree-1"></div>
+  <div class="tree tree-2"></div>
+  <div class="tree tree-3"></div>
+</div>
+
+<!-- ============ 顶栏 ============ -->
+<header class="topbar">
+  <button class="logo" data-screen="home" title="回到首页">
+    <span class="logo-badge">🧩</span>
+    <span class="logo-text">单词交叉填字<small>WordCross</small></span>
+  </button>
+  <nav class="tabs">
+    <button class="tab" data-screen="home"><i>🏠</i><span>开始</span></button>
+    <button class="tab" data-screen="dict"><i>🔍</i><span>词汇查阅</span></button>
+    <button class="tab" data-screen="book"><i>📒</i><span>生词本</span><em id="bookBadge">0</em></button>
+    <button class="tab tab-icon" id="btnSound" title="音效开关"><i>🔊</i><span>音效</span></button>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ============ 首页 ============ -->
+  <section id="screen-home" class="screen active">
+    <div class="hero wood">
+      <h1>单词交叉填字</h1>
+      <p>随机抽 <b>10 个单词</b>，让它们纵横交错摆在一起 —— 交点上是两个单词共有的那个字母。
+         我们会把字母挖空、只留几个当提示，你照着下面的中文释义把它们填回来吧！</p>
+      <div class="hero-chips">
+        <span class="chip">🧠 6 个学习阶段</span>
+        <span class="chip">📚 1145 个词条</span>
+        <span class="chip">📒 自动生词本</span>
+        <span class="chip">🎈 完全免费、打开即玩</span>
+      </div>
+    </div>
+
+    <div class="panel wood">
+      <h2><span class="num">1</span>选择学习阶段</h2>
+      <div id="levelList" class="level-list"></div>
+
+      <h2><span class="num">2</span>选择难度<span class="h2-tip">难度决定留给你多少个提示字母</span></h2>
+      <div id="diffList" class="diff-list"></div>
+
+      <div class="start-row">
+        <button id="btnStart" class="btn btn-primary btn-big">🎮 开始游戏</button>
+        <button id="btnStartBook" class="btn btn-ghost btn-big">📒 用生词本出题</button>
+      </div>
+      <p class="best-line" id="bestLine"></p>
+    </div>
+
+    <div class="howto panel wood">
+      <h2>🎈 怎么玩</h2>
+      <ol>
+        <li>点格子后直接敲键盘（手机自动弹键盘）填写字母。</li>
+        <li>一个格子可能同时属于横竖两个词，<b>再点一次</b>可切换方向；也可以用 ↑↓←→ 移动、<b>Tab</b> 跳到下一个词。</li>
+        <li>填完点「检查答案」，填错的格子会晃一下。</li>
+        <li>右边（手机在下方）的中文释义就是线索，<b>点一下释义</b>可以直接查看对应英文单词，并自动收进生词本。</li>
+        <li><b>Enter</b> 检查答案，<b>Backspace</b> 删除字母。</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ 游戏页 ============ -->
+  <section id="screen-game" class="screen">
+    <div class="gbar">
+      <button class="btn btn-ghost btn-sm" data-screen="home">← 返回</button>
+      <div class="gbar-info">
+        <span class="tag" id="gameLevel">小学</span>
+        <span class="tag tag-2" id="gameDiff">普通</span>
+        <span class="gbar-stat">⏱ <b id="gameTimer">00:00</b></span>
+        <span class="gbar-stat">✍️ <b id="filledCount">0</b>/<b id="totalCount">0</b></span>
+      </div>
+      <button class="btn btn-sm" id="btnNew">🔄 换一局</button>
+    </div>
+
+    <div class="game-layout">
+      <div class="panel wood board-panel">
+        <div class="board-scroll">
+          <div id="grid" class="grid"></div>
+        </div>
+        <div class="board-actions">
+          <button id="btnCheck" class="btn btn-primary">✅ 检查答案</button>
+          <button id="btnHint" class="btn">💡 提示一个字母</button>
+          <button id="btnClear" class="btn btn-ghost">🧹 清空重填</button>
+        </div>
+        <p class="board-tip">💡 黄色格子是送给你的提示字母，不能修改；蓝边是当前单词。</p>
+      </div>
+
+      <aside class="panel wood clue-panel">
+        <h2>📖 词义提示<span class="h2-tip">共 <b id="clueCount">10</b> 个 · 点一下查看单词</span></h2>
+        <ol id="clueList" class="clue-list"></ol>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ============ 词汇查阅 ============ -->
+  <section id="screen-dict" class="screen">
+    <div class="panel wood">
+      <h2>🔍 词汇查阅<span class="h2-tip">支持英文和中文，输入即可搜索</span></h2>
+      <div class="search-row">
+        <input id="dictInput" class="search-input" type="search" placeholder="输入英文单词或中文意思，例如 apple / 苹果" autocomplete="off" />
+        <button id="dictClear" class="btn btn-ghost btn-sm">清空</button>
+      </div>
+      <div id="dictLevels" class="filter-row"></div>
+      <p class="dict-count" id="dictCount"></p>
+      <div id="dictList" class="dict-list"></div>
+      <div class="more-row">
+        <button id="dictMore" class="btn btn-sm hidden">显示更多</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 生词本 ============ -->
+  <section id="screen-book" class="screen">
+    <div class="panel wood">
+      <h2>📒 我的生词本<span class="h2-tip" id="bookTip">点释义查看过的单词会自动收进来</span></h2>
+      <div class="book-tools">
+        <button id="bookPlay" class="btn btn-primary btn-sm">🎮 用生词本出题</button>
+        <button id="bookExport" class="btn btn-sm">📤 导出 CSV</button>
+        <button id="bookClear" class="btn btn-ghost btn-sm">🗑 清空生词本</button>
+      </div>
+      <div id="bookList" class="dict-list"></div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <span>🧩 单词交叉填字 WordCross · 纯前端静态页面，数据只存在你自己的浏览器里</span>
+  <span>词库：小学 / 初中 / 高中 / 四级 / 六级 / 雅思</span>
+</footer>
+
+<!-- 手机端键盘输入用的隐藏输入框 -->
+<input id="kbInput" class="kb-input" type="text" inputmode="text" autocomplete="off"
+       autocorrect="off" autocapitalize="characters" spellcheck="false" aria-hidden="true" tabindex="-1" />
+
+<div id="toast" class="toast"></div>
+
+<div id="modal" class="modal hidden">
+  <div class="modal-card wood">
+    <div class="modal-emoji" id="modalEmoji">🎉</div>
+    <h2 id="modalTitle">恭喜过关！</h2>
+    <div id="modalBody" class="modal-body"></div>
+    <div class="modal-actions" id="modalActions"></div>
+  </div>
+</div>
+
+<script src="js/data/primary.js"></script>
+<script src="js/data/junior.js"></script>
+<script src="js/data/senior.js"></script>
+<script src="js/data/cet4.js"></script>
+<script src="js/data/cet6.js"></script>
+<script src="js/data/ielts.js"></script>
+<script src="js/vocab.js"></script>
+<script src="js/crossword.js"></script>
+<script src="js/wordbook.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

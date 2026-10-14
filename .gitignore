@@ -1,26 +1,20 @@
-# ---- Python ----
-__pycache__/
-*.py[cod]
-*.egg-info/
-.pytest_cache/
-venv/
-.venv/
-env/
-
-# ---- PyInstaller 打包产物 ----
-build/
-dist/
-*.spec
-
-# ---- 游戏运行时数据 ----
-snake_highscore.json
-
 # ---- 编辑器 / 系统 ----
 .vscode/
 .idea/
 *.swp
 .DS_Store
 Thumbs.db
+desktop.ini
+
+# ---- 依赖与测试产物 ----
+node_modules/
+package-lock.json
+npm-debug.log*
+
+# ---- 临时文件 ----
+*.log
+*.tmp
+_ref_pdf.png
 
 # ---- WorkBuddy 工作目录 ----
 .workbuddy/
