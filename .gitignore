@@ -16,5 +16,8 @@ npm-debug.log*
 *.tmp
 _ref_pdf.png
 
+# ---- 发布应用的应用标记文件（本地保留，不入库）----
+*.genie
+
 # ---- WorkBuddy 工作目录 ----
 .workbuddy/
